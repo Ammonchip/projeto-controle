@@ -2,9 +2,7 @@
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
-double Kp = 0.168;
-double Ki = 0.0528;
-double Kd = 0;
+double Kp = 5*2, Ki = 0.5, Kd = 0;
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint,Kp,Ki,Kd, DIRECT);
 
@@ -22,13 +20,7 @@ const int trigPin = 4;
 
 void runMotor(int time_us); //função para controle do motor
 
-void tankModel();
-
 unsigned short pwm_value = 0x00; //armazena valor do duty cycle para PWM 
-
-void tankModel() {
-
-}
 
 void setup() {
   pinMode(motor, OUTPUT); //saida para o motor
@@ -37,7 +29,7 @@ void setup() {
   pinMode(trigPin, OUTPUT);  // Register trigPin for sending output
   //initialize the variables we're linked to
   Input = 0;
-  Setpoint = 8;
+  Setpoint = 10;
 
   //turn the PID on
   myPID.SetMode(AUTOMATIC);
@@ -59,12 +51,20 @@ void loop() {
 
   // Calculate and print the distance to the target.
   const double distance = 17 - microsecondsToDistance(duration);
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" cm");
+  Serial.print("Nivel agua tanque 2: ");
+  Serial.print(distance, 2);
+  Serial.print(" cm   -----   ");
   Input = distance;
   myPID.Compute();
-  runMotor(2,Output);
+  Serial.print("Output: ");
+  Serial.print(Output, 2);
+  Serial.print("   ---   Voltage: ");
+  Serial.print(Output/17, 2);
+  Serial.print(" V   -----   ");
+  Serial.print("error: ");
+  Serial.print((Setpoint - distance)*10, 2);
+  Serial.println("%");
+  runMotor(4000,Output);
 }
 
 
