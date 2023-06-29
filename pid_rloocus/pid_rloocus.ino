@@ -2,7 +2,7 @@
 
 //Define Variables we'll be connecting to
 double Setpoint, Input, Output;
-double Kp = 12.4200, Ki = 0.9999, Kd = 14.6300;
+double Kp = 0.6, Ki = 21.8412, Kd = 0.0458;
 //Specify the links and initial tuning parameters
 PID myPID(&Input, &Output, &Setpoint,Kp,Ki,Kd, DIRECT);
 
